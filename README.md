@@ -19,17 +19,19 @@ A **ready-to-use setup for Zed IDE** that lets you run the currently open file w
   - Rust   
   - PHP  
 - Prevents overlapping runs of the same task  
-- Compiled binaries go to `/tmp/zed-run`  
+- Compiled binaries go to `build_out  
 - Terminal panel opens automatically  
 
 ---
+
 
 ## 📦 Installation
 
 1. **Clone this repository**
 
 ```bash
-git clone https://github.com/kumarsaurabhkv/zed_code_runner_linux.git
+https://github.com/kumarsaurabhkv/zed_code_runner_Windows.git
+
 ```
 2. **Copy files to Zed config directory**
 
@@ -46,6 +48,6 @@ Press F5
 
 The terminal panel will display the output
 
-Compiled binaries (if any) are stored in the same folder as the source.
+Compiled binaries (if any) are stored in the build_out folder as the source.
 
 ⚠️ Pressing F5 while the task is already running will not start a new instance (prevents conflicts).
