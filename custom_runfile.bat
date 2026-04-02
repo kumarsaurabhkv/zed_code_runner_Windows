@@ -1,49 +1,48 @@
 @echo off
-setlocal enabledelayedexpansion
+setlocal enabledelayedexpansion 
 
-:: Get the file from Zed
+:: Check if Zed provided the file path 
 if "%ZED_FILE%"=="" (
-    echo Error: ZED_FILE not set. Open a file and run again.
-    exit /b 1
+    echo Error: ZED_FILE not set. Open a file and run again. 
+    exit /b 1 
 )
 
-set FILE=%ZED_FILE%
-set "BASENAME=%~nF"
-set "EXT=%~xF"
-set "WORKDIR=%~dpF"
-set "BUILDDIR=%WORKDIR%build_out"
+:: Extract path, name, and extension
+for %%F in ("%ZED_FILE%") do (
+    set "BASENAME=%%~nF" 
+    set "EXT=%%~xF" 
+    set "WORKDIR=%%~dpF" 
+)
 
-:: Create build output directory if it doesn't exist
-if not exist "%BUILDDIR%" mkdir "%BUILDDIR%"
+set "BUILDDIR=%WORKDIR%build_out" 
 
-echo Running %FILE% ...
+:: Ensure build directory exists 
+if not exist "%BUILDDIR%" mkdir "%BUILDDIR%" 
+
+echo [RUNNING %ZED_FILE%]
 echo --------------------------
 
-:: Remove leading dot from extension
-set EXT=%EXT:~1%
-
-if /I "%EXT%"=="c" (
-    gcc "%FILE%" -o "%BUILDDIR%\%BASENAME%" && "%BUILDDIR%\%BASENAME%"
-) else if /I "%EXT%"=="cpp" (
-    g++ "%FILE%" -o "%BUILDDIR%\%BASENAME%" && "%BUILDDIR%\%BASENAME%"
-) else if /I "%EXT%"=="py" (
-    python "%FILE%"
-) else if /I "%EXT%"=="js" (
-    node "%FILE%"
-) else if /I "%EXT%"=="ts" (
-    deno run "%FILE%"
-) else if /I "%EXT%"=="java" (
-    javac "%FILE%" -d "%BUILDDIR%"
+:: Logical fix: We use the %EXT% directly to avoid delayed expansion issues in the IF chain
+if /I "%EXT%"==".c" (
+    gcc "%ZED_FILE%" -o "%BUILDDIR%\%BASENAME%.exe" && "%BUILDDIR%\%BASENAME%.exe" [cite: 1, 2]
+) else if /I "%EXT%"==".cpp" (
+    g++ "%ZED_FILE%" -o "%BUILDDIR%\%BASENAME%.exe" && "%BUILDDIR%\%BASENAME%.exe" [cite: 2]
+) else if /I "%EXT%"==".py" (
+    python "%ZED_FILE%" [cite: 2]
+) else if /I "%EXT%"==".js" (
+    node "%ZED_FILE%"
+) else if /I "%EXT%"==".ts" (
+    deno run "%ZED_FILE%"
+) else if /I "%EXT%"==".java" (
+    javac "%ZED_FILE%" -d "%BUILDDIR%"
     java -cp "%BUILDDIR%" "%BASENAME%"
-) else if /I "%EXT%"=="go" (
-    go run "%FILE%"
-) else if /I "%EXT%"=="rs" (
-    rustc "%FILE%" -o "%BUILDDIR%\%BASENAME%" && "%BUILDDIR%\%BASENAME%"
-) else if /I "%EXT%"=="sh" (
-    echo Shell scripts are not supported on Windows
-) else if /I "%EXT%"=="php" (
-    php "%FILE%"
+) else if /I "%EXT%"==".go" (
+    go run "%ZED_FILE%"
+) else if /I "%EXT%"==".rs" (
+    rustc "%ZED_FILE%" -o "%BUILDDIR%\%BASENAME%.exe" && "%BUILDDIR%\%BASENAME%.exe" 
 ) else (
-    echo Unsupported file type: .%EXT%
+    echo Unsupported file type: %EXT%
     exit /b 1
 )
+
+endlocal
