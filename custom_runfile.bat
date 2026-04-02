@@ -1,34 +1,36 @@
 @echo off
-setlocal enabledelayedexpansion 
+setlocal enabledelayedexpansion
 
-:: Check if Zed provided the file path 
+:: Map arguments from tasks.json 
+:: %1 = $ZED_FILE (Full path)
+:: %2 = $ZED_DIRNAME (Directory)
+:: %3 = $ZED_FILENAME (Name + Ext)
+:: %4 = $ZED_STEM (Name only)
+set "ZED_FILE=%~1"
+set "WORKDIR=%~2"
+set "BASENAME=%~4"
+
+:: Get Extension directly from the filename 
+for %%F in ("%ZED_FILE%") do set "EXT=%%~xF"
+
 if "%ZED_FILE%"=="" (
-    echo Error: ZED_FILE not set. Open a file and run again. 
-    exit /b 1 
+    echo Error: No file provided. 
+    exit /b 1
 )
 
-:: Extract path, name, and extension
-for %%F in ("%ZED_FILE%") do (
-    set "BASENAME=%%~nF" 
-    set "EXT=%%~xF" 
-    set "WORKDIR=%%~dpF" 
-)
-
-set "BUILDDIR=%WORKDIR%build_out" 
-
-:: Ensure build directory exists 
+set "BUILDDIR=%WORKDIR%\build_out"
 if not exist "%BUILDDIR%" mkdir "%BUILDDIR%" 
 
 echo [RUNNING %ZED_FILE%]
 echo --------------------------
 
-:: Logical fix: We use the %EXT% directly to avoid delayed expansion issues in the IF chain
+:: Execution Logic 
 if /I "%EXT%"==".c" (
-    gcc "%ZED_FILE%" -o "%BUILDDIR%\%BASENAME%.exe" && "%BUILDDIR%\%BASENAME%.exe" [cite: 1, 2]
+    gcc "%ZED_FILE%" -o "%BUILDDIR%\%BASENAME%.exe" && "%BUILDDIR%\%BASENAME%.exe"
 ) else if /I "%EXT%"==".cpp" (
-    g++ "%ZED_FILE%" -o "%BUILDDIR%\%BASENAME%.exe" && "%BUILDDIR%\%BASENAME%.exe" [cite: 2]
+    g++ "%ZED_FILE%" -o "%BUILDDIR%\%BASENAME%.exe" && "%BUILDDIR%\%BASENAME%.exe"
 ) else if /I "%EXT%"==".py" (
-    python "%ZED_FILE%" [cite: 2]
+    python "%ZED_FILE%"
 ) else if /I "%EXT%"==".js" (
     node "%ZED_FILE%"
 ) else if /I "%EXT%"==".ts" (
@@ -41,7 +43,7 @@ if /I "%EXT%"==".c" (
 ) else if /I "%EXT%"==".rs" (
     rustc "%ZED_FILE%" -o "%BUILDDIR%\%BASENAME%.exe" && "%BUILDDIR%\%BASENAME%.exe" 
 ) else (
-    echo Unsupported file type: %EXT%
+    echo Unsupported file type: %EXT% 
     exit /b 1
 )
 
