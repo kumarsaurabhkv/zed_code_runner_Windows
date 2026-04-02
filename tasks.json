@@ -1,8 +1,15 @@
 [
   {
     "label": "run file",
-    "command": "%USERPROFILE%\\AppData\\Roaming\\Zed\\custom_runfile.bat",
-    "description": "Compiles and runs the current code file",
+    "command": "C:\\Users\\SAURABH\\AppData\\Roaming\\Zed\\custom_runfile.bat",
+    "args": [
+      "$ZED_FILE",
+      "$ZED_DIRNAME",
+      "$ZED_FILENAME",
+      "$ZED_STEM",
+      "$ZED_WORKTREE_ROOT"
+    ],
+    "cwd": "$ZED_WORKTREE_ROOT",
     "use_new_terminal": false,
     "allow_concurrent_runs": false,
     "reveal": "always"
