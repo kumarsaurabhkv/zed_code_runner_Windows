@@ -1,7 +1,7 @@
 [
   {
     "label": "run file",
-    "command": "C:\\Users\\SAURABH\\AppData\\Roaming\\Zed\\custom_runfile.bat",
+    "command": "C:\\Users\\(your username)\\AppData\\Roaming\\Zed\\custom_runfile.bat",
     "args": [
       "$ZED_FILE",
       "$ZED_DIRNAME",
